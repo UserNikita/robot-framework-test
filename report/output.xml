@@ -1,0 +1,1373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.0.2 (Python 3.5.2 on linux)" generated="20171030 16:44:15.563">
+<suite name="Tests" id="s1" source="/home/nikita/robot-framework-tests/tests">
+<suite name="Test" id="s1-s1" source="/home/nikita/robot-framework-tests/tests/test.robot">
+<test name="Checking the possibility of subscribing the service by the client" id="s1-s1-t1">
+<kw name="Open api session" type="setup" library="keywords">
+<doc>Создание сессии для работы с API</doc>
+<msg level="TRACE" timestamp="20171030 16:44:15.684">Arguments: [  ]</msg>
+<kw name="Create Session" library="RequestsLibrary">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>api</arg>
+<arg>${SCHEMA}${HOST}:${PORT}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.685">Arguments: [ 'api' | 'http://localhost:4000' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.685">Creating Session using : alias=api, url=http://localhost:4000, headers={},                     cookies=None, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.685">Creating session: api</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.685">Argument types are:
+&lt;class 'bool'&gt;</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.686">Return: &lt;requests.sessions.Session object at 0x7f8a67bc70b8&gt;</msg>
+<status starttime="20171030 16:44:15.685" status="PASS" endtime="20171030 16:44:15.686"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:15.686">Return: None</msg>
+<status starttime="20171030 16:44:15.684" status="PASS" endtime="20171030 16:44:15.686"></status>
+</kw>
+<kw name="Get Random Client With Positive Balance" library="DataBase">
+<doc>Получить случайного пользователя с положительным балансом</doc>
+<assign>
+<var>${client}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.686">Arguments: [  ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.687">Return: {'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.687">${client} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<status starttime="20171030 16:44:15.686" status="PASS" endtime="20171030 16:44:15.687"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${user_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.688">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.688">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.688">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.689">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:15.688" status="PASS" endtime="20171030 16:44:15.689"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.689">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.689">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.689">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:15.689" status="PASS" endtime="20171030 16:44:15.689"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.690">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.692">Starting new HTTP connection (1): localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.698">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.699">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.699">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.699">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.699">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:15.689" status="PASS" endtime="20171030 16:44:15.699"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.700">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.700">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:15.700">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.700">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.700">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:15.699" status="PASS" endtime="20171030 16:44:15.700"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:15.701">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.701">${user_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:15.687" status="PASS" endtime="20171030 16:44:15.701"></status>
+</kw>
+<kw name="Get a list of all available services" library="keywords">
+<doc>Получение всех доступных услуг</doc>
+<assign>
+<var>${all_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.701">Arguments: [  ]</msg>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/services</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.702">Arguments: [ 'api' | '/services' ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.703">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.706">http://localhost:4000 "GET /services HTTP/1.1" 200 422</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.707">Get Request using : alias=api, uri=/services, headers=None json=None</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.707">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.707">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:15.701" status="PASS" endtime="20171030 16:44:15.707"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.708">Arguments: [ ('{\n'
+ '  "count": 5, \n'
+ '  "items": [\n'
+ '    {\n'
+ '      "cost": 1.2, \n'
+ '      "id": 1, \n'
+ '      "name": "Service #1"\n'
+ '    }, \n'
+ '    {\n'
+ '      "cost": 0.35, \n'
+ '      "id": 2, \n'
+ '      "name": "Service #2"\n'
+ '    }, \n'
+ '    {\n'
+ '      "cost": 0.15, \n'
+ '      "id": 3, \n'
+ '      "name": "Service #3"\n'
+ '    }, \n'
+ '    {\n'
+ '      "cost": 0.15, \n'
+ '      "id": 4, \n'
+ '      "name": "Service #4"\n'
+ '    }, \n'
+ '    {\n'
+ '      "cost": 0.05, \n'
+ '      "id": 5, \n'
+ '      "name": "Service #5"\n'
+ '    }\n'
+ '  ]\n'
+ '}') ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.708">To JSON using : content={
+  "count": 5, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 4, 
+      "name": "Service #4"
+    }, 
+    {
+      "cost": 0.05, 
+      "id": 5, 
+      "name": "Service #5"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:15.708">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.708">Return: {'count': 5, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}, {'cost': 0.05, 'id': 5, 'name': 'Service #5'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.709">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}, {'...</msg>
+<status starttime="20171030 16:44:15.708" status="PASS" endtime="20171030 16:44:15.709"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:15.709">Return: {'count': 5, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}, {'cost': 0.05, 'id': 5, 'name': 'Service #5'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.709">${all_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}, {'...</msg>
+<status starttime="20171030 16:44:15.701" status="PASS" endtime="20171030 16:44:15.709"></status>
+</kw>
+<kw name="Get A Service Not Connected To The Client" library="utils">
+<doc>Получить услугу, которая не подключена клиенту</doc>
+<arguments>
+<arg>${user_services}</arg>
+<arg>${all_services}</arg>
+</arguments>
+<assign>
+<var>${unconnected_service}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.710">Arguments: [ {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} | {'count': 5, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}, {'cost': 0.05, 'id': 5, 'name': 'Service #5'}]} ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.710">Return: {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.710">${unconnected_service} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<status starttime="20171030 16:44:15.710" status="PASS" endtime="20171030 16:44:15.711"></status>
+</kw>
+<kw name="Connect the service to the client" library="keywords">
+<doc>Подключение услуги клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<assign>
+<var>${response_status_code}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.712">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+<arg>service_id=${service['id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.712">Arguments: [ "client_id=${client['client_id']}" | "service_id=${service['id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.713">Return: {'client_id': 4, 'service_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.713">${data} = {'client_id': 4, 'service_id': 4}</msg>
+<status starttime="20171030 16:44:15.712" status="PASS" endtime="20171030 16:44:15.714"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.714">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.714">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.715">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:15.714" status="PASS" endtime="20171030 16:44:15.715"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/add_service</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.715">Arguments: [ 'api' | '/client/add_service' | data={'client_id': 4, 'service_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.717">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.722">http://localhost:4000 "POST /client/add_service HTTP/1.1" 202 10</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.723">post response: Processing</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.723">Post Request using : alias=api, uri=/client/add_service, data={"client_id": 4, "service_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.723">Return: &lt;Response [202]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.723">${response} = &lt;Response [202]&gt;</msg>
+<status starttime="20171030 16:44:15.715" status="PASS" endtime="20171030 16:44:15.723"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:15.724">Return: 202</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.724">${response_status_code} = 202</msg>
+<status starttime="20171030 16:44:15.711" status="PASS" endtime="20171030 16:44:15.724"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${response_status_code}</arg>
+<arg>202</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.725">Arguments: [ 202 | '202' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.725">Argument types are:
+&lt;class 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.725">Return: None</msg>
+<status starttime="20171030 16:44:15.724" status="PASS" endtime="20171030 16:44:15.725"></status>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<arguments>
+<arg>1 min</arg>
+<arg>1 s</arg>
+<arg>Check if the service is connected</arg>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.726">Arguments: [ '1 min' | '1 s' | 'Check if the service is connected' | '${client}' | '${unconnected_service}' ]</msg>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.727">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.728">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.728">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.728">Return: None</msg>
+<status starttime="20171030 16:44:15.728" status="PASS" endtime="20171030 16:44:15.728"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.729">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.729">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.729">Return: None</msg>
+<status starttime="20171030 16:44:15.729" status="PASS" endtime="20171030 16:44:15.729"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.730">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.731">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.731">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.731">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:15.730" status="PASS" endtime="20171030 16:44:15.731"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.732">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.732">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.732">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:15.731" status="PASS" endtime="20171030 16:44:15.732"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.733">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.735">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.739">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.740">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.740">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.740">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.740">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:15.732" status="PASS" endtime="20171030 16:44:15.740"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:15.741">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.741">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:15.741">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:15.741">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.741">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:15.740" status="PASS" endtime="20171030 16:44:15.742"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:15.742">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:15.742">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:15.730" status="PASS" endtime="20171030 16:44:15.742"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:15.743">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} ]</msg>
+<msg level="FAIL" timestamp="20171030 16:44:15.744">ServiceNotConnectedException: Услуга не была подключена</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:15.744">Traceback (most recent call last):
+  File "/home/nikita/robot-framework-tests/library/utils.py", line 31, in check_if_the_service_was_connected
+    raise ServiceNotConnectedException('Услуга не была подключена')</msg>
+<status starttime="20171030 16:44:15.742" status="FAIL" endtime="20171030 16:44:15.744"></status>
+</kw>
+<status starttime="20171030 16:44:15.726" status="FAIL" endtime="20171030 16:44:15.744"></status>
+</kw>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:16.746">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:16.747">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.748">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.748">Return: None</msg>
+<status starttime="20171030 16:44:16.747" status="PASS" endtime="20171030 16:44:16.748"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:16.749">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.749">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.749">Return: None</msg>
+<status starttime="20171030 16:44:16.748" status="PASS" endtime="20171030 16:44:16.750"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:16.751">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:16.751">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.752">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.753">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:16.751" status="PASS" endtime="20171030 16:44:16.753"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:16.753">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.754">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.754">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:16.753" status="PASS" endtime="20171030 16:44:16.754"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:16.755">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:16.759">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:16.763">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:16.764">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.764">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.764">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.764">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:16.755" status="PASS" endtime="20171030 16:44:16.764"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:16.764">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.765">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:16.765">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:16.765">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.765">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:16.764" status="PASS" endtime="20171030 16:44:16.765"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:16.765">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:16.765">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:16.750" status="PASS" endtime="20171030 16:44:16.765"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:16.766">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} ]</msg>
+<msg level="FAIL" timestamp="20171030 16:44:16.766">ServiceNotConnectedException: Услуга не была подключена</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:16.766">Traceback (most recent call last):
+  File "/home/nikita/robot-framework-tests/library/utils.py", line 31, in check_if_the_service_was_connected
+    raise ServiceNotConnectedException('Услуга не была подключена')</msg>
+<status starttime="20171030 16:44:16.766" status="FAIL" endtime="20171030 16:44:16.766"></status>
+</kw>
+<status starttime="20171030 16:44:16.745" status="FAIL" endtime="20171030 16:44:16.767"></status>
+</kw>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:17.768">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:17.770">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.770">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.770">Return: None</msg>
+<status starttime="20171030 16:44:17.769" status="PASS" endtime="20171030 16:44:17.771"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:17.771">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.772">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.772">Return: None</msg>
+<status starttime="20171030 16:44:17.771" status="PASS" endtime="20171030 16:44:17.772"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:17.773">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:17.774">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.775">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.776">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:17.774" status="PASS" endtime="20171030 16:44:17.776"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:17.776">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.777">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.777">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:17.776" status="PASS" endtime="20171030 16:44:17.777"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:17.778">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:17.781">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:17.784">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:17.784">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.785">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.785">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.785">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:17.778" status="PASS" endtime="20171030 16:44:17.785"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:17.785">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.785">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:17.786">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:17.786">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.786">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:17.785" status="PASS" endtime="20171030 16:44:17.786"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:17.786">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:17.786">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:17.773" status="PASS" endtime="20171030 16:44:17.786"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:17.787">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} ]</msg>
+<msg level="FAIL" timestamp="20171030 16:44:17.787">ServiceNotConnectedException: Услуга не была подключена</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:17.787">Traceback (most recent call last):
+  File "/home/nikita/robot-framework-tests/library/utils.py", line 31, in check_if_the_service_was_connected
+    raise ServiceNotConnectedException('Услуга не была подключена')</msg>
+<status starttime="20171030 16:44:17.786" status="FAIL" endtime="20171030 16:44:17.787"></status>
+</kw>
+<status starttime="20171030 16:44:17.767" status="FAIL" endtime="20171030 16:44:17.787"></status>
+</kw>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:18.789">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:18.790">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.791">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.791">Return: None</msg>
+<status starttime="20171030 16:44:18.790" status="PASS" endtime="20171030 16:44:18.791"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:18.792">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.792">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.792">Return: None</msg>
+<status starttime="20171030 16:44:18.791" status="PASS" endtime="20171030 16:44:18.793"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:18.793">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:18.794">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.795">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.795">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:18.794" status="PASS" endtime="20171030 16:44:18.795"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:18.796">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.796">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.796">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:18.795" status="PASS" endtime="20171030 16:44:18.796"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:18.797">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:18.800">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:18.803">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:18.804">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.804">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.804">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.804">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:18.797" status="PASS" endtime="20171030 16:44:18.804"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:18.805">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.805">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:18.805">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:18.805">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.805">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:18.804" status="PASS" endtime="20171030 16:44:18.805"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:18.805">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:18.805">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:18.793" status="PASS" endtime="20171030 16:44:18.805"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:18.806">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} ]</msg>
+<msg level="FAIL" timestamp="20171030 16:44:18.806">ServiceNotConnectedException: Услуга не была подключена</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:18.807">Traceback (most recent call last):
+  File "/home/nikita/robot-framework-tests/library/utils.py", line 31, in check_if_the_service_was_connected
+    raise ServiceNotConnectedException('Услуга не была подключена')</msg>
+<status starttime="20171030 16:44:18.806" status="FAIL" endtime="20171030 16:44:18.807"></status>
+</kw>
+<status starttime="20171030 16:44:18.788" status="FAIL" endtime="20171030 16:44:18.807"></status>
+</kw>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:19.808">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:19.809">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.810">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.810">Return: None</msg>
+<status starttime="20171030 16:44:19.809" status="PASS" endtime="20171030 16:44:19.810"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:19.811">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.811">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.812">Return: None</msg>
+<status starttime="20171030 16:44:19.811" status="PASS" endtime="20171030 16:44:19.812"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:19.813">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:19.813">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.814">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.814">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:19.813" status="PASS" endtime="20171030 16:44:19.814"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:19.814">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.815">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.815">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:19.814" status="PASS" endtime="20171030 16:44:19.815"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:19.816">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:19.819">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:19.822">http://localhost:4000 "POST /client/services HTTP/1.1" 200 266</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:19.823">post response: {
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.823">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.823">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.823">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:19.815" status="PASS" endtime="20171030 16:44:19.824"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:19.824">Arguments: [ '{\n  "count": 3, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.824">To JSON using : content={
+  "count": 3, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:19.824">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:19.824">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.825">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:19.824" status="PASS" endtime="20171030 16:44:19.825"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:19.825">Return: {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:19.825">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}], 'count': 3}</msg>
+<status starttime="20171030 16:44:19.812" status="PASS" endtime="20171030 16:44:19.825"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:19.826">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 3, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}]} ]</msg>
+<msg level="FAIL" timestamp="20171030 16:44:19.826">ServiceNotConnectedException: Услуга не была подключена</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:19.826">Traceback (most recent call last):
+  File "/home/nikita/robot-framework-tests/library/utils.py", line 31, in check_if_the_service_was_connected
+    raise ServiceNotConnectedException('Услуга не была подключена')</msg>
+<status starttime="20171030 16:44:19.825" status="FAIL" endtime="20171030 16:44:19.827"></status>
+</kw>
+<status starttime="20171030 16:44:19.807" status="FAIL" endtime="20171030 16:44:19.827"></status>
+</kw>
+<kw name="Check if the service is connected" library="keywords">
+<doc>Проверка подключена ли услуга у клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.828">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | ${service}={'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${client}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.829">Arguments: [ '${CLIENT}' | '${client}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.830">${CLIENT} = {'clients_client_id': 4, 'client_id': 4, 'balance': 3.3, 'client_name': 'Bob Marley'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.830">Return: None</msg>
+<status starttime="20171030 16:44:20.829" status="PASS" endtime="20171030 16:44:20.830"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${SERVICE}</arg>
+<arg>${service}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.831">Arguments: [ '${SERVICE}' | '${service}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.831">${SERVICE} = {'cost': 0.15, 'id': 4, 'name': 'Service #4'}</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.832">Return: None</msg>
+<status starttime="20171030 16:44:20.831" status="PASS" endtime="20171030 16:44:20.832"></status>
+</kw>
+<kw name="Get a list of client services connected" library="keywords">
+<doc>Получение услуг подключенных клиенту</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${client_services}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.833">Arguments: [ ${client}={'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>client_id=${client['client_id']}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.833">Arguments: [ "client_id=${client['client_id']}" ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.834">Return: {'client_id': 4}</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.834">${data} = {'client_id': 4}</msg>
+<status starttime="20171030 16:44:20.833" status="PASS" endtime="20171030 16:44:20.834"></status>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<arguments>
+<arg>Content-Type=application/json</arg>
+</arguments>
+<assign>
+<var>${headers}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.835">Arguments: [ 'Content-Type=application/json' ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.835">Return: {'Content-Type': 'application/json'}</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.836">${headers} = {'Content-Type': 'application/json'}</msg>
+<status starttime="20171030 16:44:20.835" status="PASS" endtime="20171030 16:44:20.836"></status>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the</doc>
+<arguments>
+<arg>api</arg>
+<arg>/client/services</arg>
+<arg>data=${data}</arg>
+<arg>headers=${headers}</arg>
+</arguments>
+<assign>
+<var>${response}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.837">Arguments: [ 'api' | '/client/services' | data={'client_id': 4} | headers={'Content-Type': 'application/json'} ]</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:20.840">Resetting dropped connection: localhost</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:20.843">http://localhost:4000 "POST /client/services HTTP/1.1" 200 344</msg>
+<msg level="DEBUG" timestamp="20171030 16:44:20.844">post response: {
+  "count": 4, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 4, 
+      "name": "Service #4"
+    }
+  ]
+}</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.844">Post Request using : alias=api, uri=/client/services, data={"client_id": 4}, headers={'Content-Type': 'application/json'}, files=None, allow_redirects=True </msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.844">Return: &lt;Response [200]&gt;</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.844">${response} = &lt;Response [200]&gt;</msg>
+<status starttime="20171030 16:44:20.836" status="PASS" endtime="20171030 16:44:20.844"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${response.text}</arg>
+</arguments>
+<assign>
+<var>${json}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.845">Arguments: [ '{\n  "count": 4, \n  "items": [\n    {\n      "cost": 1.2, \n      "id": 1, \n      "name": "Service #1"\n    }, \n    {\n      "cost": 0.35, \n      "id": 2, \n      "name": "Service #2"\n    }, \n    {\n      "cost": 0.15, \n      "id": 3, \n      "name": "Service #3"\n    }, \n    {\n      "cost": 0.15, \n      "id": 4, \n      "name": "Service #4"\n    }\n  ]\n}' ]</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.845">To JSON using : content={
+  "count": 4, 
+  "items": [
+    {
+      "cost": 1.2, 
+      "id": 1, 
+      "name": "Service #1"
+    }, 
+    {
+      "cost": 0.35, 
+      "id": 2, 
+      "name": "Service #2"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 3, 
+      "name": "Service #3"
+    }, 
+    {
+      "cost": 0.15, 
+      "id": 4, 
+      "name": "Service #4"
+    }
+  ]
+} </msg>
+<msg level="INFO" timestamp="20171030 16:44:20.845">To JSON using : pretty_print=False </msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.845">Return: {'count': 4, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.845">${json} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}], '...</msg>
+<status starttime="20171030 16:44:20.844" status="PASS" endtime="20171030 16:44:20.845"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:20.846">Return: {'count': 4, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}]}</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.846">${client_services} = {'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}], '...</msg>
+<status starttime="20171030 16:44:20.832" status="PASS" endtime="20171030 16:44:20.846"></status>
+</kw>
+<kw name="Check If The Service Was Connected" library="utils">
+<doc>Проверить была ли подключена клиенту услуга</doc>
+<arguments>
+<arg>${service}</arg>
+<arg>${client_services}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.846">Arguments: [ {'cost': 0.15, 'id': 4, 'name': 'Service #4'} | {'count': 4, 'items': [{'cost': 1.2, 'id': 1, 'name': 'Service #1'}, {'cost': 0.35, 'id': 2, 'name': 'Service #2'}, {'cost': 0.15, 'id': 3, 'name': 'Service #3'}, {'cost': 0.15, 'id': 4, 'name': 'Service #4'}]} ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.847">Return: None</msg>
+<status starttime="20171030 16:44:20.846" status="PASS" endtime="20171030 16:44:20.847"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:20.847">Return: None</msg>
+<status starttime="20171030 16:44:20.827" status="PASS" endtime="20171030 16:44:20.847"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:20.847">Return: None</msg>
+<status starttime="20171030 16:44:15.725" status="PASS" endtime="20171030 16:44:20.847"></status>
+</kw>
+<kw name="Get Expected Client Balance" library="utils">
+<doc>Проверить текущий баланс клиента</doc>
+<arguments>
+<arg>${client}</arg>
+<arg>${unconnected_service}</arg>
+</arguments>
+<assign>
+<var>${expected_client_balance}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.847">Arguments: [ {'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | {'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.848">Return: 3.15</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.848">${expected_client_balance} = 3.15</msg>
+<status starttime="20171030 16:44:20.847" status="PASS" endtime="20171030 16:44:20.848"></status>
+</kw>
+<kw name="Get Balance By Client" library="DataBase">
+<doc>Получаем баланс по ID клиента</doc>
+<arguments>
+<arg>${client}</arg>
+</arguments>
+<assign>
+<var>${real_client_balance}</var>
+</assign>
+<msg level="TRACE" timestamp="20171030 16:44:20.848">Arguments: [ {'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.848">Return: 3.15</msg>
+<msg level="INFO" timestamp="20171030 16:44:20.849">${real_client_balance} = 3.15</msg>
+<status starttime="20171030 16:44:20.848" status="PASS" endtime="20171030 16:44:20.849"></status>
+</kw>
+<kw name="Should Be Equal As Money" library="utils">
+<doc>Функция для проверки равенства денежных сумм</doc>
+<arguments>
+<arg>${expected_client_balance}</arg>
+<arg>${real_client_balance}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.849">Arguments: [ 3.15 | 3.15 ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.849">Return: None</msg>
+<status starttime="20171030 16:44:20.849" status="PASS" endtime="20171030 16:44:20.849"></status>
+</kw>
+<kw name="Clear DataBase and close connection" type="teardown" library="keywords">
+<doc>Удаление пользователя, если он был создан</doc>
+<msg level="TRACE" timestamp="20171030 16:44:20.850">Arguments: [  ]</msg>
+<kw name="Clean" library="DataBase">
+<doc>Очистить базу данных после выполнения тестов</doc>
+<arguments>
+<arg>${CLIENT}</arg>
+<arg>${SERVICE}</arg>
+</arguments>
+<msg level="TRACE" timestamp="20171030 16:44:20.850">Arguments: [ {'balance': 3.3, 'client_id': 4, 'client_name': 'Bob Marley', 'clients_client_id': 4} | {'cost': 0.15, 'id': 4, 'name': 'Service #4'} ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.898">Return: None</msg>
+<status starttime="20171030 16:44:20.850" status="PASS" endtime="20171030 16:44:20.899"></status>
+</kw>
+<kw name="Close" library="DataBase">
+<doc>Закрыть соединение с базой данных</doc>
+<msg level="TRACE" timestamp="20171030 16:44:20.899">Arguments: [  ]</msg>
+<msg level="TRACE" timestamp="20171030 16:44:20.900">Return: None</msg>
+<status starttime="20171030 16:44:20.899" status="PASS" endtime="20171030 16:44:20.900"></status>
+</kw>
+<msg level="TRACE" timestamp="20171030 16:44:20.900">Return: None</msg>
+<status starttime="20171030 16:44:20.849" status="PASS" endtime="20171030 16:44:20.900"></status>
+</kw>
+<doc>Проверка возможности подписки клиента на услуги</doc>
+<status starttime="20171030 16:44:15.683" status="PASS" endtime="20171030 16:44:20.900" critical="yes"></status>
+</test>
+<status starttime="20171030 16:44:15.591" status="PASS" endtime="20171030 16:44:20.901"></status>
+</suite>
+<status starttime="20171030 16:44:15.564" status="PASS" endtime="20171030 16:44:20.904"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" name="Tests" id="s1" pass="1">Tests</stat>
+<stat fail="0" name="Test" id="s1-s1" pass="1">Tests.Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
